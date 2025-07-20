@@ -1,0 +1,87 @@
+
+byte pic[8] = {
+  0b00000000,
+  0b00010000,
+  0b00010000,
+  0b00101000,
+  0b00101000,
+  0b11111110,
+  0b01000100,
+  0b10000010
+};
+
+void flash(byte frame[8] , int t){
+    digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b01111111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[0] );
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b10111111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[1]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11011111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[2]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11101111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[3]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11110111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[4]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11111011);
+   shiftOut(12  , 11  , LSBFIRST  , frame[5]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11111101);
+   shiftOut(12  , 11  , LSBFIRST  , frame[6]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11111110);
+   shiftOut(12  , 11  , LSBFIRST  , frame[7]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+  }
+
+void setup() {
+  for(int i2 = 10 ; i2 < 13 ; i2++){
+        pinMode(i2 , OUTPUT);
+      }
+}
+
+void loop() {
+   //digitalWrite(10 , LOW);
+   //shiftOut(12  , 11  , LSBFIRST  , 0b01111111);
+   //shiftOut(12  , 11  , LSBFIRST  , 0b00010000);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   //digitalWrite(10 , HIGH);
+   //delay(3);
+
+   flash(pic , 2);
+
+}
