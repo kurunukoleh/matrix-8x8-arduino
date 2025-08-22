@@ -1,0 +1,206 @@
+
+#include <Keypad.h>
+
+const byte ROWS = 4;
+const byte COLS = 4;
+
+bool is_pic1 = false;
+bool is_pic2 = false;
+
+
+class Display
+{ private:
+    int t;
+    byte frame[8] = {
+    0b00000000,
+    0b00000000,
+    0b00000000,
+    0b00000000,
+    0b00000000,
+    0b00000000,
+    0b00000000,
+    0b00000000
+  };
+  
+   public:
+   Display( int FPS){
+    t = FPS;}
+    
+   void flash(){
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b01111111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[0] );
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b10111111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[1]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11011111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[2]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11101111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[3]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11110111);
+   shiftOut(12  , 11  , LSBFIRST  , frame[4]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11111011);
+   shiftOut(12  , 11  , LSBFIRST  , frame[5]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11111101);
+   shiftOut(12  , 11  , LSBFIRST  , frame[6]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+
+   digitalWrite(10 , LOW);
+   shiftOut(12  , 11  , LSBFIRST  , 0b11111110);
+   shiftOut(12  , 11  , LSBFIRST  , frame[7]);
+   //shiftOut(12  , 11  , LSBFIRST  , cn);
+   digitalWrite(10 , HIGH);
+   delay(t);
+  }
+
+  void pointmas(int px ,  int py){
+   frame[px-1] += 0b00000001 << py -1;
+ }
+
+  void clean(){
+  for(int i = 0 ; i < 8 ; i++){
+  frame[i] = 0b00000000 ;
+  }}
+
+  void rect( int x1 , int y1 , int x2 , int y2 , byte mas[8]){
+  for(int i1 = x1 ; i1 <= x2 ; i1++){
+    for(int i2 = y1 ; i2 <= y2 ; i2++){
+       pointmas(i1 , i2);
+      }
+    } 
+  }
+
+};
+
+                   
+char MatrixKeyPad[ROWS][COLS] = {
+      {'0','3','2','1'},
+      {'C','6','5','4'},
+      {'A','U','8','7'},
+      {'R','D','L','9'}         };
+
+byte rowPins[ROWS] = {6, 7, 8, 9}; 
+byte colPins[COLS] = {5, 4, 3, 2}; 
+
+Display disp(3);
+
+void star(int x , int y ){
+  disp.pointmas(1 + x , 1 + y);
+  disp.pointmas(2 + x , 2 + y );
+  disp.pointmas(3 + x , 3 + y );
+  disp.pointmas(3 + x , 1 + y );
+  disp.pointmas(1 + x , 3 + y );
+}
+
+void one(int x , int y ){
+  disp.pointmas(2 + x , 1 + y );
+  disp.pointmas(2 + x , 2 + y );
+  disp.pointmas(2 + x , 3 + y );
+  }
+
+void two(int x , int y ){
+  disp.pointmas(3 + x , 1 + y );
+  disp.pointmas(2 + x , 1 + y );
+  disp.pointmas(2 + x , 2 + y );
+  disp.pointmas(2 + x , 3 + y );
+  disp.pointmas(1 + x , 3 + y );
+  disp.pointmas(3 + x , 3 + y );
+}
+
+void wa(int x , int y ){
+  disp.pointmas(2 + x , 1 + y );
+  disp.pointmas(3 + x , 3 + y );
+  disp.pointmas(1 + x , 3 + y );
+  disp.pointmas(2 + x , 2 + y );
+  disp.pointmas(3 + x , 2 + y );
+  disp.pointmas(1 + x , 2 + y );
+  }
+
+void wc(int x , int y , byte mas[8]){
+  disp.pointmas(3 + x , 3 + y );
+  disp.pointmas(3 + x , 2 + y );
+  disp.pointmas(3 + x , 1 + y );
+  disp.pointmas(2 + x , 1 + y );
+  disp.pointmas(2 + x , 3 + y );
+  }
+
+void zero(int x , int y ){
+  disp.pointmas(1 + x , 1 + y );
+  disp.pointmas(1 + x , 2 + y );
+  disp.pointmas(1 + x , 3 + y );
+  disp.pointmas(2 + x , 1 + y );
+  disp.pointmas(2 + x , 3 + y );
+  disp.pointmas(3 + x , 1 + y );
+  disp.pointmas(3 + x , 2 + y );
+  disp.pointmas(3 + x , 3 + y );
+ 
+}
+
+Keypad customKeypad = Keypad(makeKeymap(MatrixKeyPad), colPins, rowPins, COLS, ROWS);  
+
+void setup(){
+
+  Serial.begin(9600);
+  for(int i2 = 10 ; i2 < 13 ; i2++){
+        pinMode(i2 , OUTPUT);
+      }
+}
+  
+void loop(){
+  // печатаем на серийном мониторе значения нажатой кнопки
+  char customKey = customKeypad.getKey(); 
+  
+  if (customKey=='1'){disp.clean();}
+  if (customKey=='2'){disp.clean(); disp.pointmas(2 , 3);}
+  if (customKey=='3'){}
+  if (customKey=='4'){}
+  if (customKey=='5'){}
+  if (customKey=='6'){}
+  if (customKey=='7'){}
+  if (customKey=='8'){}
+  if (customKey=='9'){}
+  if (customKey=='0'){}
+  if (customKey=='A'){}
+  if (customKey=='C'){}
+  if (customKey=='U'){}
+  if (customKey=='L'){}
+  if (customKey=='R'){}
+  if (customKey=='D'){}
+  
+  //if(is_pic1){flash(pic1 , 2);}
+  //if(is_pic2){flash(pic2 , 2);}
+
+  disp.flash();
+
+}
